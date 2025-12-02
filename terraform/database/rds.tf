@@ -18,7 +18,7 @@ resource "aws_db_instance" "rds-db" {
   manage_master_user_password = true
   username                    = "dbadmin"
   skip_final_snapshot         = true # don't need data to be recoverable in our situation
-  # vpc_security_group_ids = need to fetch state from security folder
+  vpc_security_group_ids      = data.terraform_remote_state.security.outputs.rds_sg_id
 
 
   tags = {
