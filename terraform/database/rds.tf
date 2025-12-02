@@ -1,0 +1,27 @@
+/* TODO
+- Link with Security Groups
+- Link with IAM Roles
+- Cloudwatch
+*/
+
+resource "aws_db_instance" "rds-db" {
+  db_name                     = "ecsprojectdb"
+  engine                      = "postgres"
+  instance_class              = "db.t3.micro"
+  allocated_storage           = 20
+  max_allocated_storage       = 100
+  multi_az                    = true
+  backup_retention_period     = 3
+  copy_tags_to_snapshot       = true
+  backup_window               = "03:00-04:00" # set outside of working hours
+  maintenance_window          = "Mon:00:00-Mon:03:00"
+  manage_master_user_password = true
+  username                    = "dbadmin"
+  skip_final_snapshot         = true # don't need data to be recoverable in our situation
+  # vpc_security_group_ids = need to fetch state from security folder
+
+
+  tags = {
+    Name = "esc-project-db"
+  }
+}
