@@ -1,3 +1,4 @@
+# Main route table, routing between both public subnets and the IGW
 resource "aws_route_table" "main-route-table" {
   vpc_id = aws_vpc.main.id
 
@@ -22,6 +23,7 @@ resource "aws_route_table_association" "public-us-east-2b-association" {
   route_table_id = aws_route_table.main-route-table.id
 }
 
+# Private Route table for private subnet in us-east-2a
 resource "aws_route_table" "private-us-east-2a" {
   vpc_id = aws_vpc.main.id
 
@@ -31,6 +33,7 @@ resource "aws_route_table" "private-us-east-2a" {
   }
 }
 
+# Private Route table for private subnet in us-east-2b
 resource "aws_route_table" "private-us-east-2b" {
   vpc_id = aws_vpc.main.id
 
