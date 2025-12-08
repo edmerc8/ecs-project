@@ -19,7 +19,7 @@ resource "aws_db_instance" "rds-db" {
   username                    = "dbadmin"
   skip_final_snapshot         = true # don't need data to be recoverable in our situation
   vpc_security_group_ids      = [data.terraform_remote_state.security.outputs.rds_sg_id]
-  db_subnet_group_name = aws_db_subnet_group.rds-subnet-groups.name
+  db_subnet_group_name        = aws_db_subnet_group.rds-subnet-groups.name
 
 
   tags = {
