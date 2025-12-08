@@ -45,90 +45,78 @@ resource "aws_iam_policy" "ecr-access-policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-execution-role-ecr-access" {
-  role = aws_iam_role.ecs-execution-role.name
+  role       = aws_iam_role.ecs-execution-role.name
   policy_arn = aws_iam_policy.ecr-access-policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-execution-role-secrets-manager-rds-creds" {
-  role = aws_iam_role.ecs-execution-role.name
+  role       = aws_iam_role.ecs-execution-role.name
   policy_arn = aws_iam_policy.ecs-secrets-access.arn
 }
 
 
 resource "aws_iam_policy" "ecs-secrets-access" {
-  name = "ecs-secrets-access"
+  name        = "ecs-secrets-access"
   description = "Allows ECS task to read the RDS DB credentials"
 
-  policy = jsonencode({   
+  policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-      Effect = "Allow"
-      Action = [
-        "secretsmanager:GetSecretValue",
-        "secretsmanager:DescribeSecret"
-      ]
-      Resource = data.terraform_remote_state.database.outputs.db_password_arn
-    }
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ]
+        Resource = data.terraform_remote_state.database.outputs.db_password_arn
+      }
     ]
-  }
+    }
   )
 }
 
-# resource "aws_iam_role_policy_attachment" "ecs-secrets-manager-rds-creds" {
-#   role = aws_iam_role.ecs-task-role-rds
-#   policy_arn = aws_iam_policy.ecs-secrets-access.arn
-# }
 
-# resource "aws_iam_role" "ecs-task-role-rds" {
-#   name = "ecs-task-role-rds"
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Action = "sts:AssumeRole"
-#         Effect = "Allow"
-#         Principal = {
-#           Service = "ecs-tasks.amazonaws.com"
-#         }
-#       }
-#     ]
-#   })
+# Placeholder for Backend Role, not currently needed
+# RDS access provided by task execution role
+resource "aws_iam_role" "ecs-task-role-backend" {
+  name = "ecs-task-role-backend"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+      }
+    ]
+  })
+  tags = {
+    Project   = "ecs-fargate"
+    Owner     = "edm"
+    CreatedBy = "terraform"
+  }
+}
 
-#   tags = {
-#     Name      = "ecs-task-role-rds"
-#     Project   = "ecs-fargate"
-#     Owner     = "edm"
-#     CreatedBy = "terraform"
-#   }
-# }
-
-# Need to figure out how to manage rds access using secrets manager for security
-
-# resource "aws_iam_role" "rds-access-policy" {
-#   name = "rds-access-policy"
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Action = "sts:AssumeRole"
-#         Effect = "Allow"
-#         Principal = {
-#           Service = "ecs-tasks.amazonaws.com"
-#         }
-#       },
-#     ]
-#   })
-# }
-
-
-
-# resource "aws_iam_role" "frontend-task-role" {
-#   assume_role_policy = jsondecode()
-
-#   tags = {
-#     Project   = "ecs-fargate"
-#     Owner     = "edm"
-#     CreatedBy = "terraform"
-#   }
-# }
+# Placeholder for Frontend Role, not currently needed
+resource "aws_iam_role" "ecs-task-role-frontend" {
+  name = "ecs-task-role-frontend"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+      }
+    ]
+  })
+  tags = {
+    Project   = "ecs-fargate"
+    Owner     = "edm"
+    CreatedBy = "terraform"
+  }
+}
