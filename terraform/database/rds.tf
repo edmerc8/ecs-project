@@ -30,7 +30,7 @@ resource "aws_db_instance" "rds-db" {
 resource "aws_db_subnet_group" "rds-subnet-groups" {
   name = "rds-subnet-groups"
   subnet_ids = [
-    data.terraform_remote_state.networking.outputs.subnet_id_us_east_2a,
-    data.terraform_remote_state.networking.outputs.subnet_id_us_east_2b,
+    data.terraform_remote_state.networking.outputs.private_subnet_id_us_east_2a,
+    data.terraform_remote_state.networking.outputs.private_subnet_id_us_east_2b,
   ]
 }

@@ -9,3 +9,7 @@ output "backend_target_group_arn" {
 }
 
 
+output "alb_dns_name" {
+  description = "The DNS name of the ALB"
+  value       = aws_lb.alb-for-ecs-tasks.dns_name
+}
