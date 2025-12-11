@@ -52,3 +52,14 @@ data "terraform_remote_state" "database" {
     region = "us-east-2"
   }
 }
+
+data "terraform_remote_state" "ecr" {
+  backend = "s3"
+
+  config = {
+    bucket = "ecs-project-state-bucket"
+
+    key    = "ecr/terraform.tfstate"
+    region = "us-east-2"
+  }
+}

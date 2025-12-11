@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "backend" {
   container_definitions = jsonencode([
     {
       "name" : "backend",
-      "image" : "${aws_ecr_repository.ecr-project-repo.repository_url}:backend-v1",
+      "image" : "${data.terraform_remote_state.ecr.outputs.ecr_repo_url}:backend-v1",
       "cpu" : 1024,    # full capacity of the task
       "memory" : 2048, # full capacity of the task
       "essential" : true,
@@ -102,7 +102,7 @@ resource "aws_ecs_task_definition" "frontend" {
   container_definitions = jsonencode([
     {
       "name" : "frontend",
-      "image" : "${aws_ecr_repository.ecr-project-repo.repository_url}:frontend-v1",
+      "image" : "${data.terraform_remote_state.ecr.outputs.ecr_repo_url}:frontend-v1",
       "cpu" : 1024,
       "memory" : 2048,
       "essential" : true,

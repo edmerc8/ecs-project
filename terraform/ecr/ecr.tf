@@ -1,6 +1,5 @@
 /* This file contains the terraform code for a private repository in ECR.
-This repo will contain the container images for the frontend and backend 
-of the application. Force Delete defaults to false and will stay that way
+Force Delete defaults to false and will stay that way
 because container images need to be uploaded outside of the terraform code.
 The private repo URI will be used to provide least privilege ECR access. 
 */
