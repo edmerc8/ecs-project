@@ -1,3 +1,4 @@
+# Access outputs from Networking Module
 data "terraform_remote_state" "networking" {
   backend = "s3"
 

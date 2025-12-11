@@ -1,3 +1,4 @@
+# Access outputs from Database Module
 data "terraform_remote_state" "database" {
   backend = "s3"
 

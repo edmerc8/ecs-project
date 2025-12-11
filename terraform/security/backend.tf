@@ -1,3 +1,4 @@
+# Secure remote backend for Security state with native locking enabled
 terraform {
   backend "s3" {
     bucket       = "ecs-project-state-bucket"
