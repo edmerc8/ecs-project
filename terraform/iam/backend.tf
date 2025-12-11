@@ -1,3 +1,4 @@
+# Secure remote backend for IAM state with native locking enabled
 terraform {
   backend "s3" {
     bucket       = "ecs-project-state-bucket"

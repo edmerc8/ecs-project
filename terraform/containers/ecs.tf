@@ -116,7 +116,7 @@ resource "aws_ecs_task_definition" "frontend" {
       "environment" : [
         {
           "name" : "API_BASE_URL",
-          "value" : "http://${data.terraform_remote_state.load_balancing.outputs.alb_dns_name}/api" # Public API endpoint
+          "value" : "http://${data.terraform_remote_state.load_balancing.outputs.alb_dns_name}/api" # Public API endpoint; Will likely be modified with an A record
         }
       ]
     }

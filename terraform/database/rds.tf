@@ -4,7 +4,7 @@
 - Cloudwatch
 */
 
-resource "aws_db_instance" "rds-db" {
+resource "aws_db_instance" "rds_db" {
   db_name                     = "ecsprojectdb"
   engine                      = "postgres"
   instance_class              = "db.t3.micro"
@@ -19,7 +19,7 @@ resource "aws_db_instance" "rds-db" {
   username                    = "dbadmin"
   skip_final_snapshot         = true # don't need data to be recoverable in our situation
   vpc_security_group_ids      = [data.terraform_remote_state.security.outputs.rds_sg_id]
-  db_subnet_group_name        = aws_db_subnet_group.rds-subnet-groups.name
+  db_subnet_group_name        = aws_db_subnet_group.rds_subnet_groups.name
 
 
   tags = {
@@ -27,7 +27,7 @@ resource "aws_db_instance" "rds-db" {
   }
 }
 
-resource "aws_db_subnet_group" "rds-subnet-groups" {
+resource "aws_db_subnet_group" "rds_subnet_groups" {
   name = "rds-subnet-groups"
   subnet_ids = [
     data.terraform_remote_state.networking.outputs.private_subnet_id_us_east_2a,

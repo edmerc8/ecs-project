@@ -1,5 +1,5 @@
 # Allows ECS Cluster to pull images from ECR, send logs to cloudwatch, etc
-resource "aws_iam_role" "ecs-execution-role" {
+resource "aws_iam_role" "ecs_execution_role" {
   name = "ecs-execution-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -22,7 +22,7 @@ resource "aws_iam_role" "ecs-execution-role" {
   }
 }
 
-resource "aws_iam_policy" "ecr-access-policy" {
+resource "aws_iam_policy" "ecr_access_policy" {
   name = "ecr-access-policy"
 
   policy = jsonencode({
@@ -44,18 +44,21 @@ resource "aws_iam_policy" "ecr-access-policy" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "ecs-execution-role-ecr-access" {
-  role       = aws_iam_role.ecs-execution-role.name
-  policy_arn = aws_iam_policy.ecr-access-policy.arn
+# Attaches ECR access role to ECS Execution Role
+resource "aws_iam_role_policy_attachment" "ecs_execution_role_ecr_access" {
+  role       = aws_iam_role.ecs_execution_role.name
+  policy_arn = aws_iam_policy.ecr_access_policy.arn
 }
 
-resource "aws_iam_role_policy_attachment" "ecs-execution-role-secrets-manager-rds-creds" {
-  role       = aws_iam_role.ecs-execution-role.name
-  policy_arn = aws_iam_policy.ecs-secrets-access.arn
+# Attaches Secrets Manager RDS Credentials role to ECS Execution Role
+resource "aws_iam_role_policy_attachment" "ecs_execution_role_secrets_manager_rds_creds" {
+  role       = aws_iam_role.ecs_execution_role.name
+  policy_arn = aws_iam_policy.ecs_secrets_access.arn
 }
 
 
-resource "aws_iam_policy" "ecs-secrets-access" {
+# Provides access to RDS Credentials in Secrets Manager
+resource "aws_iam_policy" "ecs_secrets_access" {
   name        = "ecs-secrets-access"
   description = "Allows ECS task to read the RDS DB credentials"
 
@@ -78,7 +81,7 @@ resource "aws_iam_policy" "ecs-secrets-access" {
 
 # Placeholder for Backend Role, not currently needed
 # RDS access provided by task execution role
-resource "aws_iam_role" "ecs-task-role-backend" {
+resource "aws_iam_role" "ecs_task_role_backend" {
   name = "ecs-task-role-backend"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -100,7 +103,7 @@ resource "aws_iam_role" "ecs-task-role-backend" {
 }
 
 # Placeholder for Frontend Role, not currently needed
-resource "aws_iam_role" "ecs-task-role-frontend" {
+resource "aws_iam_role" "ecs_task_role_frontend" {
   name = "ecs-task-role-frontend"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

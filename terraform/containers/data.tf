@@ -1,3 +1,4 @@
+# Access outputs from Load Balancing Module
 data "terraform_remote_state" "load_balancing" {
   backend = "s3"
 
@@ -9,6 +10,7 @@ data "terraform_remote_state" "load_balancing" {
   }
 }
 
+# Access outputs from Networking Module
 data "terraform_remote_state" "networking" {
   backend = "s3"
 
@@ -20,6 +22,7 @@ data "terraform_remote_state" "networking" {
   }
 }
 
+# Access outputs from Security Module
 data "terraform_remote_state" "security" {
   backend = "s3"
 
@@ -31,6 +34,7 @@ data "terraform_remote_state" "security" {
   }
 }
 
+# Access outputs from IAM Module
 data "terraform_remote_state" "iam" {
   backend = "s3"
 
@@ -42,6 +46,7 @@ data "terraform_remote_state" "iam" {
   }
 }
 
+# Access outputs from Database Module
 data "terraform_remote_state" "database" {
   backend = "s3"
 
@@ -53,6 +58,7 @@ data "terraform_remote_state" "database" {
   }
 }
 
+# Access outputs from ECR Module
 data "terraform_remote_state" "ecr" {
   backend = "s3"
 

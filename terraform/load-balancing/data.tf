@@ -1,3 +1,4 @@
+# Access outputs from Security Module
 data "terraform_remote_state" "security" {
   backend = "s3"
 
@@ -9,6 +10,7 @@ data "terraform_remote_state" "security" {
   }
 }
 
+# Access outputs from Networking Module
 data "terraform_remote_state" "networking" {
   backend = "s3"
 

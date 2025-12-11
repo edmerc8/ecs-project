@@ -1,12 +1,12 @@
 /*
 This file will be used to set up the backend for our terraform code
-The asw_s3_bucket resource ans aws_s3_bucket_versioning resources
+The asw_s3_bucket resource and aws_s3_bucket_versioning resources
 handle the creation of our backend in AWS. The terrafrom backend section 
 will need to be initialized and applied separately from the creation
 of the resources
 
 Setup
-1. The terraform backend section should be commented out to begin
+1. The terraform backend S3 section should be commented out to begin
 2. Run terraform init to initialize 
 3. Run terraform plan and review the changes
 4. Run terraform apply to create the resources in AWS
@@ -21,7 +21,7 @@ file has been saved to your S3 bucket
 */
 
 
-resource "aws_s3_bucket" "ecs-project-state-bucket" {
+resource "aws_s3_bucket" "ecs_project_state_bucket" {
   bucket = "ecs-project-state-bucket"
   region = "us-east-2"
 
@@ -30,21 +30,20 @@ resource "aws_s3_bucket" "ecs-project-state-bucket" {
   }
 }
 
-resource "aws_s3_bucket_versioning" "state-bucket-versioning" {
-  bucket = aws_s3_bucket.ecs-project-state-bucket.id
+resource "aws_s3_bucket_versioning" "state_bucket_versioning" {
+  bucket = aws_s3_bucket.ecs_project_state_bucket.id
   region = "us-east-2"
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-# terraform {
-#   backend "s3" {
-#     bucket       = "ecs-project-state-bucket" # Use the bucket name above
-#     key          = "backend/terraform.tfstate"
-#     region       = "us-east-2"
-#     encrypt      = true
-#     use_lockfile = true # Use S3 native locking
-#   }
-# }
-
+terraform {
+  backend "s3" {
+    bucket       = "ecs-project-state-bucket" # Use the bucket name above
+    key          = "backend/terraform.tfstate"
+    region       = "us-east-2"
+    encrypt      = true
+    use_lockfile = true # Use S3 native locking
+  }
+}

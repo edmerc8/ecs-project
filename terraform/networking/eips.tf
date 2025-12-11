@@ -1,5 +1,5 @@
 # Elastic IP for NAT Gateway in AZ 2a's public subnet
-resource "aws_eip" "nat-eip-subnet-2a" {
+resource "aws_eip" "nat_eip_subnet_2a" {
   domain = "vpc"
 
   tags = {
@@ -8,7 +8,7 @@ resource "aws_eip" "nat-eip-subnet-2a" {
 }
 
 # Elastic IP for NAT Gateway in AZ 2b's public subnet
-resource "aws_eip" "nat-eip-subnet-2b" {
+resource "aws_eip" "nat_eip_subnet_2b" {
   domain = "vpc"
 
   tags = {

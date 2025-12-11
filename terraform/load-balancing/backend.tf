@@ -1,3 +1,4 @@
+# Secure remote backend for Load Balancer state with native locking enabled
 terraform {
   backend "s3" {
     bucket       = "ecs-project-state-bucket"
