@@ -30,6 +30,15 @@ resource "aws_s3_bucket" "ecs_project_state_bucket" {
   }
 }
 
+# Applied by default but should be set explicitly for security
+resource "aws_s3_bucket_public_access_block" "ecs_project_state_access_block" {
+  bucket                  = aws_s3_bucket.ecs_project_state_bucket.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
 resource "aws_s3_bucket_versioning" "state_bucket_versioning" {
   bucket = aws_s3_bucket.ecs_project_state_bucket.id
   region = "us-east-2"
