@@ -34,3 +34,16 @@ resource "aws_db_subnet_group" "rds_subnet_groups" {
     data.terraform_remote_state.networking.outputs.private_subnet_id_us_east_2b,
   ]
 }
+
+# RDS Secrets for SSM Parameter Store
+resource "aws_ssm_parameter" "db_host" {
+  name  = "/ecs-project/database/host"
+  type  = "String"
+  value = aws_db_instance.rds_db.address
+}
+
+resource "aws_ssm_parameter" "db_name" {
+  name  = "/ecs-project/database/name"
+  type  = "String"
+  value = aws_db_instance.rds_db.db_name
+}

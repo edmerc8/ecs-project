@@ -33,14 +33,14 @@ resource "aws_alb_target_group" "frontend_target_group" {
 
 resource "aws_alb_target_group" "backend_target_group" {
   name        = "backend-target-group"
-  port        = 8080
+  port        = 3000
   protocol    = "HTTP"
   vpc_id      = data.terraform_remote_state.networking.outputs.vpc_id
   target_type = "ip"
 
   # Currently using all default values for Health Check
   health_check {
-    path                = "/api/"
+    path                = "/api/health"
     healthy_threshold   = 2
     unhealthy_threshold = 2
   }

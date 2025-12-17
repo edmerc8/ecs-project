@@ -69,3 +69,15 @@ data "terraform_remote_state" "ecr" {
     region = "us-east-2"
   }
 }
+
+# Access outputs from ECS Logs Module
+data "terraform_remote_state" "ecs_app_logs" {
+  backend = "s3"
+
+  config = {
+    bucket = "ecs-project-state-bucket"
+
+    key    = "logging/ecs-app-logs/terraform.tfstate"
+    region = "us-east-2"
+  }
+}

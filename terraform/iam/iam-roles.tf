@@ -35,13 +35,35 @@ resource "aws_iam_policy" "ecr_access_policy" {
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
         ],
         "Resource" : "*" # Update to only provide access to the Private Repo needed for the project
       }
     ]
   })
+}
+
+resource "aws_iam_policy" "cloudwatch_logs_access_policy" {
+  name = "cloudwatch_logs-access-policy"
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        "Resource" : "*" # Update to only provide access to the group needed for the project
+      }
+    ]
+  })
+}
+
+# Attaches Cloudwatch Logs access role to ECS Execution Role
+resource "aws_iam_role_policy_attachment" "ecs_execution_role_cloudwatch_logs_access" {
+  role       = aws_iam_role.ecs_execution_role.name
+  policy_arn = aws_iam_policy.cloudwatch_logs_access_policy.arn
 }
 
 # Attaches ECR access role to ECS Execution Role
@@ -69,9 +91,14 @@ resource "aws_iam_policy" "ecs_secrets_access" {
         Effect = "Allow"
         Action = [
           "secretsmanager:GetSecretValue",
-          "secretsmanager:DescribeSecret"
+          "secretsmanager:DescribeSecret",
+          "ssm:GetParameters"
         ]
-        Resource = data.terraform_remote_state.database.outputs.db_password_arn
+        Resource = [
+          data.terraform_remote_state.database.outputs.db_password_arn,
+          data.terraform_remote_state.database.outputs.db_host_param_arn,
+          data.terraform_remote_state.database.outputs.db_name_param_arn,
+        ]
       }
     ]
     }
