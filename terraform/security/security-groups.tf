@@ -26,13 +26,22 @@ resource "aws_vpc_security_group_ingress_rule" "alb_sg_ingress_http" {
   to_port           = 80
 }
 
-# should be updated to allow traffic to the target group of the alb
-resource "aws_vpc_security_group_egress_rule" "alb_sg_egress" {
+# should be updated to allow traffic to the target group of the alb - the ecs frontend
+resource "aws_vpc_security_group_egress_rule" "alb_sg_egress_ecs_frontend" {
   security_group_id            = aws_security_group.alb_sg_public.id
   referenced_security_group_id = aws_security_group.ecs_sg.id
   from_port                    = 80
   ip_protocol                  = "tcp"
   to_port                      = 80
+}
+
+# should be updated to allow traffic to the target group of the alb - the ecs backend
+resource "aws_vpc_security_group_egress_rule" "alb_sg_egress_ecs_backend" {
+  security_group_id            = aws_security_group.alb_sg_public.id
+  referenced_security_group_id = aws_security_group.ecs_sg.id
+  from_port                    = 3000
+  ip_protocol                  = "tcp"
+  to_port                      = 3000
 }
 
 
@@ -46,12 +55,22 @@ resource "aws_security_group" "ecs_sg" {
   }
 }
 
+# Allow alb traffic on port 80
 resource "aws_vpc_security_group_ingress_rule" "ecs_sg_ingress" {
   security_group_id            = aws_security_group.ecs_sg.id
   referenced_security_group_id = aws_security_group.alb_sg_public.id
   from_port                    = 80
   ip_protocol                  = "tcp"
   to_port                      = 80
+}
+
+# Allow alb traffic on port 3000
+resource "aws_vpc_security_group_ingress_rule" "ecs_sg_ingress_alb" {
+  security_group_id            = aws_security_group.ecs_sg.id
+  referenced_security_group_id = aws_security_group.alb_sg_public.id
+  from_port                    = 3000
+  ip_protocol                  = "tcp"
+  to_port                      = 3000
 }
 
 
@@ -83,7 +102,7 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
-# No egress needed due to stateful nature of security groups
+# Allow traffic from ECS to RDS
 resource "aws_vpc_security_group_ingress_rule" "rds_sg_ingress" {
   security_group_id            = aws_security_group.rds_sg.id
   referenced_security_group_id = aws_security_group.ecs_sg.id

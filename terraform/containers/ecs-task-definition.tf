@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "backend" {
       "secrets" : [
         {
           "name" : "PG_HOST",
-          "valueFrom" : "${data.terraform_remote_state.database.outputs.db_password_arn}:host::" # arn + key
+          "valueFrom" : "${data.terraform_remote_state.database.outputs.db_host_param_arn}" # retrieve from Parameter store
         },
         {
           "name" : "PG_USER",
@@ -57,7 +57,7 @@ resource "aws_ecs_task_definition" "backend" {
         },
         {
           "name" : "PG_DB",
-          "valueFrom" : "${data.terraform_remote_state.database.outputs.db_password_arn}:dbname::" # arn + key
+          "valueFrom" : "${data.terraform_remote_state.database.outputs.db_name_param_arn}" # retrieve from Parameter Store
         },
       ]
     }
