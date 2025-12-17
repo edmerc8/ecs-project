@@ -8,10 +8,6 @@ output "db_host_param_arn" {
   value = aws_ssm_parameter.db_host.arn
 }
 
-output "db_port_param_arn" {
-  value = aws_ssm_parameter.db_port.arn
-}
-
 output "db_name_param_arn" {
   value = aws_ssm_parameter.db_name.arn
 }

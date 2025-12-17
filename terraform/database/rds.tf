@@ -42,12 +42,6 @@ resource "aws_ssm_parameter" "db_host" {
   value = aws_db_instance.rds_db.address
 }
 
-resource "aws_ssm_parameter" "db_port" {
-  name  = "/ecs-project/database/port"
-  type  = "String"
-  value = tostring(aws_db_instance.rds_db.port)
-}
-
 resource "aws_ssm_parameter" "db_name" {
   name  = "/ecs-project/database/name"
   type  = "String"
