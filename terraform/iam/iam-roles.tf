@@ -98,6 +98,7 @@ resource "aws_iam_policy" "ecs_secrets_access" {
           data.terraform_remote_state.database.outputs.db_password_arn,
           data.terraform_remote_state.database.outputs.db_host_param_arn,
           data.terraform_remote_state.database.outputs.db_name_param_arn,
+          data.terraform_remote_state.database.outputs.db_port_param_arn
         ]
       }
     ]

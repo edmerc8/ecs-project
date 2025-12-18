@@ -42,6 +42,12 @@ resource "aws_ecs_task_definition" "backend" {
           "awslogs-stream-prefix" : "backend"                                                    # double check this
         }
       },
+      "environment" : [
+        {
+          "name" : "DB_ENGINE",
+          "value" : "postgres"
+        },
+      ],
       "secrets" : [
         {
           "name" : "PG_HOST",
@@ -58,6 +64,10 @@ resource "aws_ecs_task_definition" "backend" {
         {
           "name" : "PG_DB",
           "valueFrom" : "${data.terraform_remote_state.database.outputs.db_name_param_arn}" # retrieve from Parameter Store
+        },
+        {
+          "name" : "PG_PORT",
+          "valueFrom" : "${data.terraform_remote_state.database.outputs.db_port_param_arn}"
         },
       ]
     }
