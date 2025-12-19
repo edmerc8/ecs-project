@@ -10,6 +10,11 @@ resource "aws_lb" "alb_ecs_tasks" {
   ]
 
   security_groups = [data.terraform_remote_state.security.outputs.alb_sg_id]
+
+  access_logs {
+    bucket  = data.terraform_remote_state.alb-access-logs.outputs.alb_access_log_s3_bucket_id
+    enabled = true
+  }
 }
 
 resource "aws_alb_target_group" "frontend_target_group" {

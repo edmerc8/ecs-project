@@ -21,3 +21,14 @@ data "terraform_remote_state" "networking" {
     region = "us-east-2"
   }
 }
+
+data "terraform_remote_state" "alb-access-logs" {
+  backend = "s3"
+
+  config = {
+    bucket = "ecs-project-state-bucket"
+
+    key    = "logging/alb-access-logs/terraform.tfstate"
+    region = "us-east-2"
+  }
+}
