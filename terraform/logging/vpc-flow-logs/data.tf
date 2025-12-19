@@ -9,3 +9,8 @@ data "terraform_remote_state" "networking" {
     region = "us-east-2"
   }
 }
+
+data "aws_caller_identity" "current" {}
+
+data "aws_elb_service_account" "main" {}
+
