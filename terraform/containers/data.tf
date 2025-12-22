@@ -34,18 +34,6 @@ data "terraform_remote_state" "security" {
   }
 }
 
-# Access outputs from IAM Module
-data "terraform_remote_state" "iam" {
-  backend = "s3"
-
-  config = {
-    bucket = "ecs-project-state-bucket"
-
-    key    = "iam/terraform.tfstate"
-    region = "us-east-2"
-  }
-}
-
 # Access outputs from Database Module
 data "terraform_remote_state" "database" {
   backend = "s3"
