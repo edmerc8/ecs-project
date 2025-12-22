@@ -6,7 +6,7 @@ resource "aws_cloudtrail" "ecs_project_cloudtrail" {
 
   # Documentation Note: Log stream requires a wildcard so it can access any stream in the group
   cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail_logs.arn}:*"
-  cloud_watch_logs_role_arn  = data.terraform_remote_state.iam.outputs.cloudtrail_cloudwatch_log_delivery_role_arn
+  cloud_watch_logs_role_arn  = aws_iam_role.cloudtrail_cloudwatch_log_delivery_role.arn
 }
 
 resource "aws_s3_bucket" "cloudtrail_logs_bucket" {

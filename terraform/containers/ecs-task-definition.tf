@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "backend" {
   network_mode             = "awsvpc"
   cpu                      = "1024"
   memory                   = "2048"
-  execution_role_arn       = data.terraform_remote_state.iam.outputs.task_execution_role_arn
+  execution_role_arn       = aws_iam_role.ecs_execution_role.arn
 
   runtime_platform {
     operating_system_family = "LINUX"
@@ -81,7 +81,7 @@ resource "aws_ecs_task_definition" "frontend" {
   network_mode             = "awsvpc"
   cpu                      = "1024"
   memory                   = "2048"
-  execution_role_arn       = data.terraform_remote_state.iam.outputs.task_execution_role_arn
+  execution_role_arn       = aws_iam_role.ecs_execution_role.arn
 
   runtime_platform {
     operating_system_family = "LINUX"
