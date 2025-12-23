@@ -1,7 +1,7 @@
 variable "project_name" {
   description = "Project Name"
   type        = string
-  default     = "ecs-fargate-containerized-app"
+  default     = "ecs-fargate-app"
 }
 
 variable "primary_region" {
