@@ -85,3 +85,7 @@ variable "ecs_subnet_group" {
 variable "ecs_security_groups" {
   type = list(string)
 }
+
+variable "cluster_name" {
+  type = string
+}

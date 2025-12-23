@@ -6,6 +6,26 @@ module "networking" {
   subnet_cidr_range = var.subnet_cidr_range
   cidr_range_all    = var.cidr_range_all
   eip_domain        = var.eip_domain
+  public_subnets = {
+    public-1 = {
+      "cidr_offset" = 1
+      "az_index"    = 0
+    }
+    public-2 = {
+      "cidr_offset" = 2
+      "az_index"    = 1
+    }
+  }
+  private_subnets = {
+    private-1 = {
+      "cidr_offset" = 11
+      "az_index"    = 0
+    }
+    private-2 = {
+      "cidr_offset" = 12
+      "az_index"    = 1
+    }
+  }
 }
 
 module "security" {
@@ -71,16 +91,14 @@ module "vpc_flow_logs" {
   vpc_id = module.networking.vpc_id
 }
 
-module "container_insights_logs" {
-  source = "../../modules/logging/container_insights_logs"
+# module "container_insights_logs" {
+#   source = "../../modules/logging/container_insights_logs"
 
-  project_name              = var.project_name
-  cloudwatch_retention_days = var.cloudwatch_retention_days
+#   project_name              = var.project_name
+#   cloudwatch_retention_days = var.cloudwatch_retention_days
+#   ecs_cluster_name          = var.cluster_name
 
-  # containers module outputs
-  ecs_cluster_name = module.containers.cluster_name
-
-}
+# }
 
 module "database" {
   source = "../../modules/database"
@@ -96,10 +114,8 @@ module "database" {
   db_maintenance_window    = var.db_maintenance_window
 
   # networking module outputs
-  db_subnet_groups = [
-    module.networking.private_subnet_id_us_east_2a,
-    module.networking.private_subnet_id_us_east_2b
-  ]
+  db_subnet_groups = module.networking.private_subnet_ids
+
 
   # security module outputs
   vpc_security_groups = [
@@ -115,11 +131,9 @@ module "load_balancing" {
 
 
   # networking module outputs
-  vpc_id = module.networking.vpc_id
-  lb_subnets = [
-    module.networking.public_subnet_id_us_east_2a,
-    module.networking.public_subnet_id_us_east_2b
-  ]
+  vpc_id     = module.networking.vpc_id
+  lb_subnets = module.networking.public_subnet_ids
+
 
   # security module outputs
   lb_security_groups = [
@@ -151,12 +165,10 @@ module "containers" {
   frontend_port        = var.frontend_port
   db_engine            = var.db_engine
   primary_region       = var.primary_region
+  cluster_name         = var.cluster_name
 
   # networking module outputs
-  ecs_subnet_group = [
-    module.networking.private_subnet_id_us_east_2a,
-    module.networking.private_subnet_id_us_east_2b
-  ]
+  ecs_subnet_group = module.networking.private_subnet_ids
 
   # database module outputs
   db_host_secret     = module.database.db_host_param_arn

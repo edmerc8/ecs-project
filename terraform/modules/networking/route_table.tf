@@ -13,42 +13,39 @@ resource "aws_route_table" "main_route_table" {
   }
 }
 
-resource "aws_route_table_association" "public_us_east_2a_association" {
-  subnet_id      = aws_subnet.public_us_east_2a.id
-  route_table_id = aws_route_table.main_route_table.id
-}
+resource "aws_route_table_association" "public_subnet_association" {
+  for_each = var.public_subnets
 
-resource "aws_route_table_association" "public_us_east_2b_association" {
-  subnet_id      = aws_subnet.public_us_east_2b.id
+  subnet_id      = aws_subnet.public_subnet[each.key].id
   route_table_id = aws_route_table.main_route_table.id
 }
 
 # Private Route table for private subnet in us-east-2a
-resource "aws_route_table" "private_us_east_2a" {
-  vpc_id = aws_vpc.main.id
+resource "aws_route_table" "private_subnets" {
+  for_each = var.public_subnets
 
+  vpc_id = aws_vpc.main.id
   route {
     cidr_block     = var.cidr_range_all
-    nat_gateway_id = aws_nat_gateway.public_subnet_2a.id
+    nat_gateway_id = aws_nat_gateway.public_subnets[each.key].id
   }
 }
 
-# Private Route table for private subnet in us-east-2b
-resource "aws_route_table" "private_us_east_2b" {
-  vpc_id = aws_vpc.main.id
+# need this to reference public key specified for NAT Gateway based on private key
+locals {
+  private_key_to_az = {
+    for k, v in var.private_subnets : k => v.az_index
+  }
 
-  route {
-    cidr_block     = var.cidr_range_all
-    nat_gateway_id = aws_nat_gateway.public_subnet_2b.id
+  az_to_public_key = {
+    for k, v in var.public_subnets : v.az_index => k
   }
 }
 
-resource "aws_route_table_association" "private_us_east_2a_association" {
-  subnet_id      = aws_subnet.private_us_east_2a.id
-  route_table_id = aws_route_table.private_us_east_2a.id
-}
+resource "aws_route_table_association" "private_subnets_association" {
+  for_each = var.private_subnets
 
-resource "aws_route_table_association" "private_us_east_2b_association" {
-  subnet_id      = aws_subnet.private_us_east_2b.id
-  route_table_id = aws_route_table.private_us_east_2b.id
+  subnet_id      = aws_subnet.private_subnet[each.key].id
+  route_table_id = aws_route_table.private_subnets[local.az_to_public_key[local.private_key_to_az[each.key]]].id
+
 }

@@ -1,17 +1,11 @@
-# Elastic IP for NAT Gateway in AZ 2a's public subnet
-resource "aws_eip" "nat_eip_subnet_2a" {
-  domain = var.eip_domain
+resource "aws_eip" "nat_eip" {
+  # Filter the subnet map to only include public ones
+  for_each = var.public_subnets
+
+  domain = "vpc"
 
   tags = {
-    Name = "nat-eip-subnet-2a"
-  }
-}
-
-# Elastic IP for NAT Gateway in AZ 2b's public subnet
-resource "aws_eip" "nat_eip_subnet_2b" {
-  domain = var.eip_domain
-
-  tags = {
-    Name = "nat-eip-subnet-2b"
+    # This gives them names like "nat-eip-public-1"
+    Name = "nat-eip-${each.key}"
   }
 }

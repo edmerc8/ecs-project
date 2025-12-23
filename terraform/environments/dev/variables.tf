@@ -221,3 +221,8 @@ variable "vpc_flow_log_file_format" {
   default     = "parquet"
 }
 
+variable "cluster_name" {
+  description = "ECS Cluster Name"
+  type        = string
+  default     = "cluster"
+}
