@@ -19,5 +19,16 @@ variable "eip_domain" {
 }
 
 
-#Availability Zones
+variable "public_subnets" {
+  type = map(object({
+    cidr_offset = number
+    az_index    = number
+  }))
+}
 
+variable "private_subnets" {
+  type = map(object({
+    cidr_offset = number
+    az_index    = number
+  }))
+}

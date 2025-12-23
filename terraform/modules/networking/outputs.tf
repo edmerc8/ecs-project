@@ -3,22 +3,12 @@ output "vpc_id" {
   value       = aws_vpc.main.id
 }
 
-output "public_subnet_id_us_east_2a" {
-  description = "CIDR of us-east-2a public subnet"
-  value       = aws_subnet.public_us_east_2a.id
+output "public_subnet_ids" {
+  description = "List of all public subnet IDs"
+  value       = values(aws_subnet.public_subnet)[*].id
 }
 
-output "public_subnet_id_us_east_2b" {
-  description = "CIDR of us-east-2b public subnet"
-  value       = aws_subnet.public_us_east_2b.id
-}
-
-output "private_subnet_id_us_east_2a" {
-  description = "CIDR of us-east-2a private subnet"
-  value       = aws_subnet.private_us_east_2a.id
-}
-
-output "private_subnet_id_us_east_2b" {
-  description = "CIDR of us-east-2b private subnet"
-  value       = aws_subnet.private_us_east_2b.id
+output "private_subnet_ids" {
+  description = "List of all private subnet IDs"
+  value       = values(aws_subnet.private_subnet)[*].id
 }
