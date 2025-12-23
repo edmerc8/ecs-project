@@ -153,7 +153,10 @@ module "containers" {
   primary_region       = var.primary_region
 
   # networking module outputs
-
+  ecs_subnet_group = [
+    module.networking.private_subnet_id_us_east_2a,
+    module.networking.private_subnet_id_us_east_2b
+  ]
 
   # database module outputs
   db_host_secret     = module.database.db_host_param_arn
@@ -168,10 +171,8 @@ module "containers" {
   lb_dns_name              = module.load_balancing.lb_dns_name
   lb_backend_target_group  = module.load_balancing.backend_target_group
   lb_frontend_target_group = module.load_balancing.frontend_target_group
-  ecs_subnet_group = [
-    module.networking.private_subnet_id_us_east_2a,
-    module.networking.private_subnet_id_us_east_2b
-  ]
+
+  # security module outputs
   ecs_security_groups = [
     module.security.ecs_sg_id
   ]
