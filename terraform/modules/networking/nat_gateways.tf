@@ -1,4 +1,4 @@
-# NAT Gateway in public subnet of us-east-2a
+# NAT Gateway in public subnets of us-east-2
 resource "aws_nat_gateway" "public_subnets" {
   for_each = var.public_subnets
 

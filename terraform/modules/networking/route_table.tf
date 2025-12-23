@@ -20,7 +20,7 @@ resource "aws_route_table_association" "public_subnet_association" {
   route_table_id = aws_route_table.main_route_table.id
 }
 
-# Private Route table for private subnet in us-east-2a
+# Private Route table for private subnets in us-east-2
 resource "aws_route_table" "private_subnets" {
   for_each = var.public_subnets
 
