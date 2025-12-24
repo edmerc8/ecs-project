@@ -127,7 +127,15 @@ module "load_balancing" {
   source = "../../modules/load_balancing"
 
   # local variables
-  lb_type = var.lb_type
+  lb_type            = var.lb_type
+  frontend_port      = var.frontend_port
+  backend_port       = var.backend_port
+  http_protocol      = var.http_protocol
+  http_port          = var.http_port
+  https_protocol     = var.https_protocol
+  https_port         = var.https_port
+  alias_domain       = var.alias_domain
+  ssl_policy_version = var.ssl_policy_version
 
 
   # networking module outputs
@@ -142,11 +150,6 @@ module "load_balancing" {
 
   # alb access logs module outputs
   lb_access_logs_bucket = module.alb_access_logs.alb_access_log_s3_bucket_id
-
-  frontend_port = var.frontend_port
-  backend_port  = var.backend_port
-  http_protocol = var.http_protocol
-  http_port     = var.http_port
 
 }
 
@@ -180,7 +183,7 @@ module "containers" {
   ecs_access_logs_bucket = module.ecs_app_logs.ecs_log_group_name
 
   # load balancing module outputs
-  lb_dns_name              = module.load_balancing.lb_dns_name
+  lb_dns_name              = var.alias_domain
   lb_backend_target_group  = module.load_balancing.backend_target_group
   lb_frontend_target_group = module.load_balancing.frontend_target_group
 

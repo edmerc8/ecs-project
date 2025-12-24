@@ -1,3 +1,3 @@
-output "alb_dns_name" {
-  value = module.load_balancing.lb_dns_name
+output "app_domain_name" {
+  value = var.alias_domain
 }
