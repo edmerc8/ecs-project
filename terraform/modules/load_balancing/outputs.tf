@@ -9,3 +9,7 @@ output "backend_target_group" {
 output "frontend_target_group" {
   value = aws_alb_target_group.frontend_target_group.arn
 }
+
+output "lb_arn" {
+  value = aws_lb.alb_ecs_tasks.arn
+}
