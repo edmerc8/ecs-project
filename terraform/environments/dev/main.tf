@@ -91,6 +91,15 @@ module "vpc_flow_logs" {
   vpc_id = module.networking.vpc_id
 }
 
+module "waf_logs" {
+  source = "../../modules/logging/waf_logs"
+
+  # local variables
+  s3_object_ownership        = var.s3_object_ownership
+  s3_to_glacier_storage_days = var.s3_to_glacier_storage_days
+  s3_to_expiration_days      = var.s3_to_expiration_days
+}
+
 # module "container_insights_logs" {
 #   source = "../../modules/logging/container_insights_logs"
 
@@ -151,6 +160,18 @@ module "load_balancing" {
   # alb access logs module outputs
   lb_access_logs_bucket = module.alb_access_logs.alb_access_log_s3_bucket_id
 
+}
+
+
+module "waf" {
+  source = "../../modules/waf"
+
+  # load-balancing module outputs
+  lb_resource = module.load_balancing.lb_arn
+
+  # waf logs module outputs
+  waf_logs_bucket        = module.waf_logs.waf_logs_bucket
+  waf_logs_bucket_policy = module.waf_logs.waf_logs_bucket_policy
 }
 
 module "containers" {
