@@ -1,2 +1,2 @@
 # ecs-project
-Repository for Project 1. This will be a full stack application with ECS Fargate + CI/CD
+Repository for Project 1. This will be a three tier application backed by ECS Fargate
