@@ -12,7 +12,7 @@ resource "aws_ecs_task_definition" "backend" {
   network_mode             = var.ecs_network_mode
   cpu                      = var.backend_task_cpu
   memory                   = var.backend_task_memory
-  execution_role_arn       = aws_iam_role.ecs_execution_role.arn
+  execution_role_arn       = aws_iam_role.ecs_backend_execution_role.arn
 
   runtime_platform {
     operating_system_family = "LINUX"
@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "backend" {
   container_definitions = jsonencode([
     {
       "name" : "backend",
-      "image" : "${data.aws_ecr_repository.ecr_repo_url.repository_url}:${var.backend_image_name}",
+      "image" : "${data.aws_ecr_repository.ecr_backend_repo_url.repository_url}:${var.backend_image_name}",
       "cpu" : var.backend_task_cpu,       # full capacity of the task
       "memory" : var.backend_task_memory, # full capacity of the task
       "essential" : true,
@@ -36,10 +36,9 @@ resource "aws_ecs_task_definition" "backend" {
       "logConfiguration" : {
         "logDriver" : "awslogs", # built in cloudwatch log driver
         "options" : {
-          "awslogs-create-group" : "true",
           "awslogs-group" : var.ecs_access_logs_bucket, # Reference from logging
           "awslogs-region" : var.primary_region,        # Bucket region
-          "awslogs-stream-prefix" : "backend"           # double check this
+          "awslogs-stream-prefix" : "backend-task"
         }
       },
       "environment" : [
@@ -81,7 +80,7 @@ resource "aws_ecs_task_definition" "frontend" {
   network_mode             = var.ecs_network_mode
   cpu                      = var.frontend_task_cpu
   memory                   = var.frontend_task_memory
-  execution_role_arn       = aws_iam_role.ecs_execution_role.arn
+  execution_role_arn       = aws_iam_role.ecs_frontend_execution_role.arn
 
   runtime_platform {
     operating_system_family = "LINUX"
@@ -90,7 +89,7 @@ resource "aws_ecs_task_definition" "frontend" {
   container_definitions = jsonencode([
     {
       "name" : "frontend",
-      "image" : "${data.aws_ecr_repository.ecr_repo_url.repository_url}:frontend-v1",
+      "image" : "${data.aws_ecr_repository.ecr_frontend_repo_url.repository_url}:${var.frontend_image_name}",
       "cpu" : var.frontend_task_cpu,
       "memory" : var.frontend_task_memory,
       "essential" : true,
@@ -104,10 +103,9 @@ resource "aws_ecs_task_definition" "frontend" {
       "logConfiguration" : {
         "logDriver" : "awslogs", # built in cloudwatch log driver
         "options" : {
-          "awslogs-create-group" : "true",
           "awslogs-group" : var.ecs_access_logs_bucket, # Reference from logging
           "awslogs-region" : var.primary_region,        # Bucket region
-          "awslogs-stream-prefix" : "frontend"          # double check this
+          "awslogs-stream-prefix" : "frontend-task"
         }
       },
       "environment" : [

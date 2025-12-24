@@ -1,6 +1,6 @@
 # Allows ECS Cluster to pull images from ECR, send logs to cloudwatch, etc
-resource "aws_iam_role" "ecs_execution_role" {
-  name = "ecs-execution-role"
+resource "aws_iam_role" "ecs_backend_execution_role" {
+  name = "ecs-backend-execution-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -17,10 +17,30 @@ resource "aws_iam_role" "ecs_execution_role" {
   })
 
   tags = {
-    Name      = "ecs-execution-role"
-    Project   = "ecs-fargate"
-    Owner     = "edm"
-    CreatedBy = "terraform"
+    Name = "ecs-execution-role"
+  }
+}
+
+# Allows ECS Cluster to pull images from ECR, send logs to cloudwatch, etc
+resource "aws_iam_role" "ecs_frontend_execution_role" {
+  name = "ecs-frontend-execution-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name = "ecs-execution-role"
   }
 }
 
@@ -35,6 +55,12 @@ resource "aws_iam_policy" "ecr_access_policy" {
         Effect = "Allow"
         Action = [
           "ecr:GetAuthorizationToken",
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage"
@@ -90,17 +116,27 @@ resource "aws_iam_policy" "ecs_secrets_access" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_execution_role_ecr_access" {
-  role       = aws_iam_role.ecs_execution_role.name
+resource "aws_iam_role_policy_attachment" "ecs_backend_execution_role_ecr_access" {
+  role       = aws_iam_role.ecs_backend_execution_role.name
   policy_arn = aws_iam_policy.ecr_access_policy.arn
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_execution_role_cloudwatch_logs_access" {
-  role       = aws_iam_role.ecs_execution_role.name
+resource "aws_iam_role_policy_attachment" "ecs_backend_execution_role_cloudwatch_logs_access" {
+  role       = aws_iam_role.ecs_backend_execution_role.name
   policy_arn = aws_iam_policy.cloudwatch_logs_access_policy.arn
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_execution_role_secrets_manager_rds_creds" {
-  role       = aws_iam_role.ecs_execution_role.name
+resource "aws_iam_role_policy_attachment" "ecs_backend_execution_role_secrets_manager_rds_creds" {
+  role       = aws_iam_role.ecs_backend_execution_role.name
   policy_arn = aws_iam_policy.ecs_secrets_access.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_frontend_execution_role_ecr_access" {
+  role       = aws_iam_role.ecs_frontend_execution_role.name
+  policy_arn = aws_iam_policy.ecr_access_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_frontend_execution_role_cloudwatch_logs_access" {
+  role       = aws_iam_role.ecs_frontend_execution_role.name
+  policy_arn = aws_iam_policy.cloudwatch_logs_access_policy.arn
 }
