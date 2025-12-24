@@ -46,14 +46,12 @@ resource "aws_s3_bucket_policy" "waf_log_delivery" {
         }
         Resource = aws_s3_bucket.waf_logs_bucket.arn
       },
-      # For object writes to S3 from an ALB, AWS has a legacy method that must also be supported
       {
         Sid    = "AllowWafLogWrites"
         Action = "s3:PutObject"
         Effect = "Allow"
         Principal = {
           Service = "delivery.logs.amazonaws.com"
-
         }
         Resource = "${aws_s3_bucket.waf_logs_bucket.arn}/*"
       },
