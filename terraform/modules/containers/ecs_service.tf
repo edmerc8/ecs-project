@@ -24,6 +24,10 @@ resource "aws_ecs_service" "backend" {
     security_groups  = var.ecs_security_groups
     assign_public_ip = false
   }
+
+  lifecycle {
+    ignore_changes = [desired_count]
+  }
 }
 
 resource "aws_ecs_service" "frontend" {
@@ -44,5 +48,9 @@ resource "aws_ecs_service" "frontend" {
     subnets          = var.ecs_subnet_group
     security_groups  = var.ecs_security_groups
     assign_public_ip = false
+  }
+
+  lifecycle {
+    ignore_changes = [desired_count]
   }
 }
