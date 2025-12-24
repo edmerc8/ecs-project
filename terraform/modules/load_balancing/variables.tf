@@ -33,3 +33,19 @@ variable "backend_port" {
 variable "http_port" {
   type = number
 }
+
+variable "https_port" {
+  type = number
+}
+
+variable "https_protocol" {
+  type = string
+}
+
+variable "alias_domain" {
+  type = string
+}
+
+variable "ssl_policy_version" {
+  type = string
+}

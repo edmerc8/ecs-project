@@ -27,6 +27,10 @@ resource "aws_alb_target_group" "frontend_target_group" {
     unhealthy_threshold = 2
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = {
     Name = "frontend-target-group"
   }
@@ -46,16 +50,23 @@ resource "aws_alb_target_group" "backend_target_group" {
     unhealthy_threshold = 2
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tags = {
     Name = "backend-target-group"
   }
 }
 
-resource "aws_alb_listener" "listener" {
+resource "aws_alb_listener" "https_listener" {
   load_balancer_arn = aws_lb.alb_ecs_tasks.arn
-  port              = var.http_port
-  protocol          = var.http_protocol
+  port              = var.https_port
+  protocol          = var.https_protocol
 
+  # Need cert before this step
+  ssl_policy      = var.ssl_policy_version # Use TLS 1.3 (Modern Best Practice)
+  certificate_arn = aws_acm_certificate_validation.cert_verify.certificate_arn
 
   default_action {
     type             = "forward"
@@ -63,10 +74,26 @@ resource "aws_alb_listener" "listener" {
   }
 }
 
+resource "aws_alb_listener" "http_listener" {
+  load_balancer_arn = aws_lb.alb_ecs_tasks.arn
+  port              = var.http_port
+  protocol          = var.http_protocol
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = var.https_port
+      protocol    = var.https_protocol
+      status_code = "HTTP_301" # Webpage moved to new URL
+    }
+  }
+}
+
 # for the frontend and backend to be handled by different containers, the alb will
 # have to handle routing traffic between the two, potentially using path based routing
 resource "aws_lb_listener_rule" "listener_backend_rule" {
-  listener_arn = aws_alb_listener.listener.arn
+  listener_arn = aws_alb_listener.https_listener.arn
   priority     = 100
 
   action {

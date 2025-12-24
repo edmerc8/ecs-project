@@ -125,10 +125,22 @@ variable "lb_type" {
   default     = "application"
 }
 
+variable "https_protocol" {
+  description = "HTTPS Protocol"
+  type        = string
+  default     = "HTTPS"
+}
+
 variable "http_protocol" {
   description = "HTTP Protocol"
   type        = string
   default     = "HTTP"
+}
+
+variable "ssl_policy_version" {
+  description = "The version of SSL used for certificate validation"
+  type        = string
+  default     = "ELBSecurityPolicy-TLS13-1-2-2021-06"
 }
 
 # Containers
@@ -225,4 +237,10 @@ variable "cluster_name" {
   description = "ECS Cluster Name"
   type        = string
   default     = "cluster"
+}
+
+variable "alias_domain" {
+  description = "Domain to be used for the Load Balancer"
+  type        = string
+  default     = "edmerc-architect-portfolio.com"
 }
