@@ -74,7 +74,7 @@ resource "aws_alb_listener" "https_listener" {
   }
 }
 
-resource "aws_alb_listener" "listener" {
+resource "aws_alb_listener" "http_listener" {
   load_balancer_arn = aws_lb.alb_ecs_tasks.arn
   port              = var.http_port
   protocol          = var.http_protocol
