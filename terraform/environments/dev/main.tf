@@ -100,15 +100,6 @@ module "waf_logs" {
   s3_to_expiration_days      = var.s3_to_expiration_days
 }
 
-# module "container_insights_logs" {
-#   source = "../../modules/logging/container_insights_logs"
-
-#   project_name              = var.project_name
-#   cloudwatch_retention_days = var.cloudwatch_retention_days
-#   ecs_cluster_name          = var.cluster_name
-
-# }
-
 module "database" {
   source = "../../modules/database"
 
@@ -130,6 +121,8 @@ module "database" {
   vpc_security_groups = [
     module.security.rds_sg_id
   ]
+
+  depends_on = [module.security.rds_sg_id]
 }
 
 module "load_balancing" {
