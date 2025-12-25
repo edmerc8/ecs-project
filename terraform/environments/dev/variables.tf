@@ -154,13 +154,13 @@ variable "ecs_network_mode" {
 variable "backend_task_cpu" {
   description = "CPU for Backend ECS Task"
   type        = number
-  default     = 1024
+  default     = 256
 }
 
 variable "backend_task_memory" {
   description = "Memory for Backend ECS Task"
   type        = number
-  default     = 2048
+  default     = 512
 }
 
 variable "backend_image_name" {
@@ -172,13 +172,13 @@ variable "backend_image_name" {
 variable "frontend_task_cpu" {
   description = "CPU for Frontend ECS Task"
   type        = number
-  default     = 1024
+  default     = 256
 }
 
 variable "frontend_task_memory" {
   description = "Memory for Frontend ECS Task"
   type        = number
-  default     = 2048
+  default     = 512
 }
 
 variable "frontend_image_name" {
