@@ -91,6 +91,14 @@ module "vpc_flow_logs" {
   vpc_id = module.networking.vpc_id
 }
 
+module "rds_logs" {
+  source = "../../modules/logging/rds_logs"
+
+  db_name                   = var.db_name
+  db_engine_version         = var.db_engine_version
+  cloudwatch_retention_days = var.cloudwatch_retention_days
+}
+
 module "waf_logs" {
   source = "../../modules/logging/waf_logs"
 
@@ -104,14 +112,17 @@ module "database" {
   source = "../../modules/database"
 
   # local variables
-  project_name             = var.project_name
-  db_engine                = var.db_engine
-  db_instance_class        = var.db_instance_class
-  db_storage               = var.db_storage
-  db_max_storage           = var.db_max_storage
-  db_backup_retention_days = var.db_backup_retention_days
-  db_backup_window         = var.db_backup_window
-  db_maintenance_window    = var.db_maintenance_window
+  project_name              = var.project_name
+  db_name                   = var.db_name
+  db_engine                 = var.db_engine
+  db_engine_version         = var.db_engine_version
+  db_instance_class         = var.db_instance_class
+  db_storage                = var.db_storage
+  db_max_storage            = var.db_max_storage
+  db_backup_retention_days  = var.db_backup_retention_days
+  db_backup_window          = var.db_backup_window
+  db_maintenance_window     = var.db_maintenance_window
+  cloudwatch_retention_days = var.cloudwatch_retention_days
 
   # networking module outputs
   db_subnet_groups = module.networking.private_subnet_ids
@@ -121,6 +132,9 @@ module "database" {
   vpc_security_groups = [
     module.security.rds_sg_id
   ]
+
+  # rds logs module outputs
+  log_group_params_name = module.rds_logs.rds_parameter_group_name
 
   depends_on = [module.security.rds_sg_id]
 }

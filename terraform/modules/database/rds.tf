@@ -5,8 +5,10 @@
 */
 
 resource "aws_db_instance" "rds_db" {
-  db_name                     = "ecsprojectdb"
+  db_name                     = var.db_name
+  identifier                  = var.db_name
   engine                      = var.db_engine
+  engine_version              = var.db_engine_version
   instance_class              = var.db_instance_class
   allocated_storage           = var.db_storage
   max_allocated_storage       = var.db_max_storage
@@ -21,6 +23,12 @@ resource "aws_db_instance" "rds_db" {
   vpc_security_group_ids      = var.vpc_security_groups
   db_subnet_group_name        = aws_db_subnet_group.rds_subnet_groups.name
 
+  enabled_cloudwatch_logs_exports = ["postgresql"]
+  parameter_group_name            = var.log_group_params_name
+
+  performance_insights_enabled          = true
+  performance_insights_retention_period = 465
+  database_insights_mode                = "advanced"
 
   tags = {
     Name = "esc-project-db"
