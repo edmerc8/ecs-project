@@ -166,7 +166,7 @@ variable "backend_task_memory" {
 variable "backend_image_name" {
   description = "Name of Backend ECS Image"
   type        = string
-  default     = "backend-v1"
+  default     = "v1"
 }
 
 variable "frontend_task_cpu" {
@@ -183,8 +183,8 @@ variable "frontend_task_memory" {
 
 variable "frontend_image_name" {
   description = "Name of Frontend ECS Image"
-  type        = number
-  default     = 443
+  type        = string
+  default     = "v1"
 }
 
 # VPC Flow Logs
