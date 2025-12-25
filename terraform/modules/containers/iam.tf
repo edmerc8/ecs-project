@@ -65,7 +65,10 @@ resource "aws_iam_policy" "ecr_access_policy" {
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage"
         ]
-        Resource = "*" # Update to only provide access to the Private Repo needed for the project
+        Resource = [
+          data.aws_ecr_repository.ecr_frontend_repo_url.arn,
+          data.aws_ecr_repository.ecr_backend_repo_url.arn
+        ]
       }
     ]
   })
@@ -84,7 +87,7 @@ resource "aws_iam_policy" "cloudwatch_logs_access_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ]
-        Resource = "*" # Update to only provide access to the group needed for the project
+        Resource = "arn:aws:logs:${data.aws_region.current.id}:${data.aws_caller_identity.current.account_id}:log-group:ecs-app-logs:*"
       }
     ]
   })
