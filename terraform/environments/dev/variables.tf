@@ -62,7 +62,7 @@ variable "backend_port" {
 variable "frontend_port" {
   description = "Port used for frontend traffic"
   type        = number
-  default     = 80
+  default     = 8080
 }
 
 variable "db_port" {
