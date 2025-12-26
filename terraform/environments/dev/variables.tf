@@ -65,6 +65,18 @@ variable "frontend_port" {
   default     = 8080
 }
 
+variable "db_name" {
+  description = "RDS DB name"
+  type        = string
+  default     = "ecsprojectpostgresdb"
+}
+
+variable "db_engine_version" {
+  description = "Postgres version used by RDS"
+  type        = string
+  default     = "18.1"
+}
+
 variable "db_port" {
   description = "Port used for database traffic"
   type        = number
