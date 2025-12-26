@@ -23,10 +23,15 @@ resource "aws_db_parameter_group" "postgres_rds_params" {
     value = "1"
   }
 
-  # Slow Query Logs, 5 seconds
+  # Slow Query Logs, 1 second
   parameter {
     name  = "log_min_duration_statement"
-    value = "5000"
+    value = "1000"
+  }
+
+  parameter {
+    name  = "log_error_verbosity"
+    value = "default"
   }
 
 
