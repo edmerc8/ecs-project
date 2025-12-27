@@ -1,12 +1,6 @@
-resource "aws_cloudwatch_log_group" "rds_logs" {
-  name = "/aws/rds/instance/${var.db_name}/postgresql"
-
-  retention_in_days = var.cloudwatch_retention_days # Would be longer in PRD, just for cost savings now
-}
-
 resource "aws_db_parameter_group" "postgres_rds_params" {
   name   = "postgres-rds-params"
-  family = data.aws_rds_engine_version.postgres17.parameter_group_family
+  family = data.aws_rds_engine_version.postgres18.parameter_group_family
 
   parameter {
     name  = "log_statement"
