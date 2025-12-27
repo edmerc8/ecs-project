@@ -1,9 +1,3 @@
-/* TODO
-- Link with Security Groups
-- Link with IAM Roles
-- Cloudwatch
-*/
-
 resource "aws_db_instance" "rds_db" {
   db_name                     = var.db_name
   identifier                  = var.db_name
