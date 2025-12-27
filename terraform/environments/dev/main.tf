@@ -220,3 +220,31 @@ module "containers" {
     module.security.ecs_sg_id
   ]
 }
+
+module "lb_dashboard" {
+  source = "../../modules/dashboards/lb_cloudwatch_dashboard"
+
+  primary_region = var.primary_region
+
+  lb_arn_suffix          = module.load_balancing.lb_arn_suffix
+  backend_tg_arn_suffix  = module.load_balancing.backend_target_group_arn_suffix
+  frontend_tg_arn_suffix = module.load_balancing.frontend_target_group_arn_suffix
+}
+
+module "ecs_dashboard" {
+  source = "../../modules/dashboards/ecs_cloudwatch_dashboard"
+
+  primary_region = var.primary_region
+
+  ecs_cluster_name          = module.containers.cluster_name
+  ecs_frontend_service_name = module.containers.ecs_frontend_service_name
+  ecs_backend_service_name  = module.containers.ecs_backend_service_name
+}
+
+module "rds_dashboard" {
+  source = "../../modules/dashboards/rds_cloudwatch_dashboard"
+
+  primary_region = var.primary_region
+
+  db_instance_id = module.database.db_instance_id
+}

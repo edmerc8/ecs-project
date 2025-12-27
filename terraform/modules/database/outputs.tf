@@ -14,3 +14,8 @@ output "db_name_param_arn" {
 output "db_port_param_arn" {
   value = aws_ssm_parameter.db_port.arn
 }
+
+output "db_instance_id" {
+  description = "Identifier for the RDS DB"
+  value       = aws_db_instance.rds_db.identifier
+}
