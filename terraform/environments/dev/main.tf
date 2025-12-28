@@ -248,3 +248,18 @@ module "rds_dashboard" {
 
   db_instance_id = module.database.db_instance_id
 }
+
+module "alarms" {
+  source = "../../modules/alarms"
+
+  primary_region = var.primary_region
+  alarm_email    = var.alarm_email
+
+  ecs_frontend_service_name = module.containers.ecs_frontend_service_name
+  ecs_backend_service_name  = module.containers.ecs_backend_service_name
+  ecs_cluster_name          = module.containers.cluster_name
+  lb_arn_suffix             = module.load_balancing.lb_arn_suffix
+  backend_tg_arn_suffix     = module.load_balancing.backend_target_group
+  frontend_tg_arn_suffix    = module.load_balancing.frontend_target_group
+  db_instance_id            = module.database.db_instance_id
+}
