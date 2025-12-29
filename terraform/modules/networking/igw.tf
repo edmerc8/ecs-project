@@ -1,0 +1,8 @@
+# Internet Gateway for main VPC
+resource "aws_internet_gateway" "internet_gateway" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "main-internet-gateway"
+  }
+}
