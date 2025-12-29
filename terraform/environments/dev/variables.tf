@@ -256,3 +256,9 @@ variable "alias_domain" {
   type        = string
   default     = "edmerc-architect-portfolio.com"
 }
+
+variable "alarm_email" {
+  description = "E-Mail to be notified when CloudWatch Alarms are triggered"
+  type        = string
+  sensitive   = true
+}
