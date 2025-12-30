@@ -3,6 +3,9 @@
 ## Overview
 A highly available, secure, and containerized web application environment deployed on AWS using ECS Fargate and Terraform. 
 
+## Note
+To maintain cost-efficiency and adhere to FinOps best practices, the live environment for this project is currently de-provisioned
+
 
 ## Architecture Diagram
 <img width="1164" height="1126" alt="architecture_diagram_v1" src="https://github.com/user-attachments/assets/0eb34060-d2c0-4640-a3ae-4d8e3d225fec" />
