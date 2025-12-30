@@ -48,7 +48,7 @@ Create ECR Repositories
 10. `terraform plan`
 11. `terraform apply -auto-approve`
 
-12. Push Dockerfile images to ECR
+12. Push Dockerfile images to ECR; Cloned and updated from https://github.com/docker/getting-started-todo-app
 
 Build Architecture
 
