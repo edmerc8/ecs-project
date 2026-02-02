@@ -61,5 +61,5 @@ Build Architecture
 16. `terraform apply -auto-approve`
 
 # Author
-Evan Mercurio - AWS Certified Solutions Architect & Full-Stack Engineer
+Evan Mercurio - AWS Certified Solutions Architect, AWS Certified AI Practitioner, & Full-Stack Engineer
 linkedin.com/in/evan-mercurio-503707191
