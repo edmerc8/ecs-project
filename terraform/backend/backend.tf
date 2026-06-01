@@ -4,55 +4,58 @@ The asw_s3_bucket resource and aws_s3_bucket_versioning resources
 handle the creation of our backend in AWS. The terrafrom backend section 
 will need to be initialized and applied separately from the creation
 of the resources
-
-Setup
-1. The terraform backend S3 section should be commented out to begin
-2. Run terraform init to initialize 
-3. Run terraform plan and review the changes
-4. Run terraform apply to create the resources in AWS
-
-5. Select the terraform backend section and remove the block commenting
-it out
-6. Run terraform init again to initialize your s3 backend
-7. Type 'yes' in the terminal to confirm that you want to copy 
-the existing state to a new backend
-8. Log into your AWS account and check to make sure the .tfstate
-file has been saved to your S3 bucket
 */
 
 
-resource "aws_s3_bucket" "ecs_project_state_bucket" {
-  bucket = "ecs-project-state-bucket"
-  region = "us-east-2"
+resource "aws_s3_bucket" "sandbox_state_bucket" {
+  bucket = var.bucket_name
 
+  object_lock_enabled = true
   tags = {
-    Name = "ecs-project-state-bucket"
+    Name = "sandbox-state-bucket"
+  }
+
+  lifecycle {
+    prevent_destroy = true
   }
 }
 
 # Applied by default but should be set explicitly for security
-resource "aws_s3_bucket_public_access_block" "ecs_project_state_access_block" {
-  bucket                  = aws_s3_bucket.ecs_project_state_bucket.id
+resource "aws_s3_bucket_public_access_block" "sandbox_state_access_block" {
+  bucket                  = aws_s3_bucket.sandbox_state_bucket.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_versioning" "state_bucket_versioning" {
-  bucket = aws_s3_bucket.ecs_project_state_bucket.id
-  region = "us-east-2"
-  versioning_configuration {
-    status = "Enabled"
+# Retains records for governance purposes
+resource "aws_s3_bucket_object_lock_configuration" "state_lock_config" {
+  bucket = aws_s3_bucket.sandbox_state_bucket.id
+
+  rule {
+    default_retention {
+      mode = "GOVERNANCE"
+      days = 1
+    }
   }
 }
 
-terraform {
-  backend "s3" {
-    bucket       = "ecs-project-state-bucket" # Use the bucket name above
-    key          = "backend/terraform.tfstate"
-    region       = "us-east-2"
-    encrypt      = true
-    use_lockfile = true # Use S3 native locking
+# Default encryption managed by SSE
+resource "aws_s3_bucket_server_side_encryption_configuration" "sandbox_state_encryption" {
+  bucket = aws_s3_bucket.sandbox_state_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+# Enable Versioning for objects stored in the S3 bucket
+resource "aws_s3_bucket_versioning" "state_bucket_versioning" {
+  bucket = aws_s3_bucket.sandbox_state_bucket.id
+  versioning_configuration {
+    status = "Enabled"
   }
 }
