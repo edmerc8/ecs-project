@@ -37,6 +37,23 @@ To maintain cost-efficiency and adhere to FinOps best practices, the live enviro
 2. Terraform installed
 3. Docker Installed
 
+Bootstrap One-Time Resources (Remote State Bucket + ECR Repositories)
+
+4. Navigate to terraform/environments/bootstrap folder
+5. `terraform init`
+6. `terraform plan`
+7. `terraform apply -auto-approve`
+8. Uncomment the `backend "s3"` block in backend.tf, then run `terraform init` again and confirm migrating state to the new S3 backend
+
+9. Push Dockerfile images to ECR; Cloned and updated from https://github.com/docker/getting-started-todo-app
+
+Build Architecture
+
+10. Navigate to terraform/environments/dev
+11. `terraform init`
+12. `terraform plan`
+13. `terraform apply -auto-approve`
+
 Create Remote Backend
 
 4. Navigate to terraform/backend folder
