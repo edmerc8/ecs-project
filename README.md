@@ -54,6 +54,29 @@ Build Architecture
 12. `terraform plan`
 13. `terraform apply -auto-approve`
 
+Create Remote Backend
+
+4. Navigate to terraform/backend folder
+5. `terraform init`
+6. `terraform plan`
+7. `terraform apply -auto-approve`
+
+Create ECR Repositories
+
+8. Navigate to terraform/ecr folder
+9. `terraform init`
+10. `terraform plan`
+11. `terraform apply -auto-approve`
+
+12. Push Dockerfile images to ECR; Cloned and updated from https://github.com/docker/getting-started-todo-app
+
+Build Architecture
+
+13. Navigate to terraform/environments/dev
+14. `terraform init`
+15. `terraform plan`
+16. `terraform apply -auto-approve`
+
 # Author
 Evan Mercurio - AWS Certified Solutions Architect, AWS Certified AI Practitioner, & Full-Stack Engineer
 linkedin.com/in/evan-mercurio-503707191
